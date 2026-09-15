@@ -1,0 +1,17 @@
+rules_version = '2';
+
+/**
+ * KEY2RAJ Storage rules.
+ *
+ * Uploads go through /api/admin/upload on the server, which uses the
+ * Admin SDK, so no browser ever needs write access here. Files are made
+ * publicly readable individually when they are uploaded, which is why
+ * read is closed as well.
+ */
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
