@@ -6,9 +6,14 @@ import { getAuth } from "firebase-admin/auth";
 
 config({ path: ".env.local" });
 
-const projectId = process.env.FIREBASE_PROJECT_ID;
-const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+// ADMIN_* names are used in deployment because Firebase App Hosting
+// reserves the FIREBASE_ prefix. Both are accepted here.
+const projectId = process.env.ADMIN_PROJECT_ID || process.env.FIREBASE_PROJECT_ID;
+const clientEmail = process.env.ADMIN_CLIENT_EMAIL || process.env.FIREBASE_CLIENT_EMAIL;
+const privateKey = (process.env.ADMIN_PRIVATE_KEY || process.env.FIREBASE_PRIVATE_KEY)?.replace(
+  /\\n/g,
+  "\n"
+);
 
 if (!projectId || !clientEmail || !privateKey) {
   console.error("\nMissing Firebase credentials. Fill in .env.local first:");

@@ -1,0 +1,90 @@
+# =====================================================================
+# FIREBASE APP HOSTING — deployment settings for KEY2RAJ
+# ---------------------------------------------------------------------
+# Classic Firebase Hosting only serves static files. This site has a
+# server: server components, server actions and the Admin SDK. So it
+# runs on App Hosting, which builds the app and runs it on Cloud Run.
+#
+# Two kinds of setting below:
+#   value:  written here in plain text — safe, these are public anyway
+#   secret: stored in Google Secret Manager, never in your repository
+#
+# BUILD means the value is needed while the site is being built
+# (anything starting with NEXT_PUBLIC_ is baked into the browser code).
+# RUNTIME means it is needed while the server is running.
+# =====================================================================
+
+runConfig:
+  # Scales to zero when nobody is visiting, so a quiet site costs almost
+  # nothing. Raise minInstances to 1 later if the first visit each
+  # morning feels slow.
+  minInstances: 0
+  maxInstances: 3
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 512
+
+env:
+  # ---- Public Firebase config -------------------------------------
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: REPLACE_ME
+    availability: [BUILD, RUNTIME]
+
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: REPLACE_ME
+    availability: [BUILD, RUNTIME]
+
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: REPLACE_ME
+    availability: [BUILD, RUNTIME]
+
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: REPLACE_ME
+    availability: [BUILD, RUNTIME]
+
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: REPLACE_ME
+    availability: [BUILD, RUNTIME]
+
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: REPLACE_ME
+    availability: [BUILD, RUNTIME]
+
+  # ---- Site settings ----------------------------------------------
+  # Must be the real address once you have one. Canonical URLs, the
+  # sitemap and WhatsApp link previews are all built from it.
+  - variable: NEXT_PUBLIC_SITE_URL
+    value: https://key2raj.web.app
+    availability: [BUILD, RUNTIME]
+
+  - variable: NEXT_PUBLIC_WHATSAPP_NUMBER
+    value: "919813608001"
+    availability: [BUILD, RUNTIME]
+
+  # Optional. Leave the whole entry out if you have no Maps key.
+  # - variable: NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
+  #   value: REPLACE_ME
+  #   availability: [BUILD, RUNTIME]
+
+  # ---- Private server credentials ---------------------------------
+  # These are secrets. Create them first with:
+  #   firebase apphosting:secrets:set firebase-client-email
+  #   firebase apphosting:secrets:set firebase-private-key
+  #
+  # Note the ADMIN_ prefix. App Hosting reserves FIREBASE_ for its own
+  # variables and will not let you set one. The code accepts either.
+  - variable: ADMIN_PROJECT_ID
+    value: REPLACE_ME
+    availability: [RUNTIME]
+
+  - variable: ADMIN_CLIENT_EMAIL
+    secret: firebase-client-email
+    availability: [RUNTIME]
+
+  - variable: ADMIN_PRIVATE_KEY
+    secret: firebase-private-key
+    availability: [RUNTIME]
+
+  - variable: ADMIN_STORAGE_BUCKET
+    value: REPLACE_ME
+    availability: [RUNTIME]

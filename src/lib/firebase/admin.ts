@@ -23,24 +23,55 @@ export function adminApp(): App {
     return cached;
   }
 
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  // The key is stored with literal \n characters in .env.local,
-  // so they have to be turned back into real line breaks.
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  /**
+   * Credentials are read from ADMIN_* first, then FIREBASE_*.
+   *
+   * Why two names: Firebase App Hosting reserves the FIREBASE_ prefix
+   * for its own variables and refuses to set one. So deployments use
+   * ADMIN_CLIENT_EMAIL and ADMIN_PRIVATE_KEY, while .env.local on your
+   * machine can keep the original names. Either works.
+   */
+  const projectId =
+    process.env.ADMIN_PROJECT_ID ||
+    process.env.FIREBASE_PROJECT_ID ||
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 
-  if (!projectId || !clientEmail || !privateKey) {
-    throw new Error(
-      "Firebase Admin is not configured. Check FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL and FIREBASE_PRIVATE_KEY in .env.local"
-    );
+  const clientEmail = process.env.ADMIN_CLIENT_EMAIL || process.env.FIREBASE_CLIENT_EMAIL;
+
+  // The key is stored with literal \n characters, so they have to be
+  // turned back into real line breaks.
+  const privateKey = (process.env.ADMIN_PRIVATE_KEY || process.env.FIREBASE_PRIVATE_KEY)?.replace(
+    /\\n/g,
+    "\n"
+  );
+
+  const storageBucket =
+    process.env.ADMIN_STORAGE_BUCKET ||
+    process.env.FIREBASE_STORAGE_BUCKET ||
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
+
+  if (clientEmail && privateKey && projectId) {
+    cached = initializeApp({
+      credential: cert({ projectId, clientEmail, privateKey }),
+      storageBucket,
+    });
+    return cached;
   }
 
-  cached = initializeApp({
-    credential: cert({ projectId, clientEmail, privateKey }),
-    storageBucket:
-      process.env.FIREBASE_STORAGE_BUCKET || process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  });
-  return cached;
+  /**
+   * No key in the environment. On Google infrastructure — which is
+   * where App Hosting runs — the server already has an identity, and
+   * Firebase picks it up automatically. This is the safer path in
+   * production: there is no key file to leak because there is no key.
+   */
+  if (projectId) {
+    cached = initializeApp({ projectId, storageBucket });
+    return cached;
+  }
+
+  throw new Error(
+    "Firebase Admin is not configured. Set ADMIN_CLIENT_EMAIL and ADMIN_PRIVATE_KEY (or the FIREBASE_ equivalents) in .env.local"
+  );
 }
 
 export const adminDb = (): Firestore => getFirestore(adminApp());
