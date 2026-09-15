@@ -27,27 +27,27 @@ runConfig:
 env:
   # ---- Public Firebase config -------------------------------------
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    value: REPLACE_ME
+    value: AIzaSyDbwtnf4LzeSBJ2ZT_Wi5CW5vPQb8Vc0xM
     availability: [BUILD, RUNTIME]
 
   - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-    value: REPLACE_ME
+    value: key2raj-95979.firebaseapp.com
     availability: [BUILD, RUNTIME]
 
   - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
-    value: REPLACE_ME
+    value: key2raj-95979
     availability: [BUILD, RUNTIME]
 
   - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-    value: REPLACE_ME
+    value: key2raj-95979.firebasestorage.app
     availability: [BUILD, RUNTIME]
 
   - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
-    value: REPLACE_ME
+    value: 211690642144
     availability: [BUILD, RUNTIME]
 
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
-    value: REPLACE_ME
+    value: 1:211690642144:web:ba3d42534d58e1988c8e85
     availability: [BUILD, RUNTIME]
 
   # ---- Site settings ----------------------------------------------
@@ -74,7 +74,7 @@ env:
   # Note the ADMIN_ prefix. App Hosting reserves FIREBASE_ for its own
   # variables and will not let you set one. The code accepts either.
   - variable: ADMIN_PROJECT_ID
-    value: REPLACE_ME
+    value: key2raj-95979
     availability: [RUNTIME]
 
   - variable: ADMIN_CLIENT_EMAIL
@@ -86,5 +86,5 @@ env:
     availability: [RUNTIME]
 
   - variable: ADMIN_STORAGE_BUCKET
-    value: REPLACE_ME
+    value: key2raj-95979.firebasestorage.app
     availability: [RUNTIME]
