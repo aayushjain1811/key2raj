@@ -41,7 +41,7 @@ export const siteConfig = {
   consultant: {
     name: "Rajpal",
     role: "Property Consultant",
-    photo: "/consultant.jpg",
+    photo: "/consultant.png",
     bio: "Eighteen years across Gurugram, Noida and Faridabad. I visit every property on this site before it is listed, and I will tell you when one is wrong for you.",
   },
 
